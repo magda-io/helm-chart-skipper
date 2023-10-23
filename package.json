@@ -1,0 +1,15 @@
+{
+  "name": "helm-chart-skipper",
+  "version": "1.0.0",
+  "description": "Helm chart for deploying [skipper](https://github.com/zalando/skipper) as cluster internal service proxy",
+  "repository": "https://github.com/magda-io/helm-chart-skipper",
+  "author": "Jacky Jiang <t83714@gmail.com>",
+  "license": "Apache-2.0",
+  "scripts": {
+    "helm-docs": "docker run --rm -v \"$(pwd):/helm-docs\" -u $(id -u) jnorwood/helm-docs:v1.11.3 -t ./README.md.gotmpl -o ../README.md"
+  },
+  "private": true,
+  "devDependencies": {
+    "@magda/ci-utils": "^1.0.5"
+  }
+}
