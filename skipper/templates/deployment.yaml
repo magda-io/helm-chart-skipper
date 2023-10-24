@@ -36,31 +36,19 @@ spec:
           args:
           - "skipper"
           - -config-file
-          - "/etc/skipper/config.yaml"
+          - "/etc/skipper-config/config.yaml"
           {{- if empty .Values.routes | not }}
           - -routes-file
-          - "/etc/skipper/routes.eskip"
+          - "/etc/skipper-routes/routes.eskip"
           {{- end }}
           ports:
           - name: service-port
             containerPort: 9090
             protocol: TCP
           livenessProbe:
-            {{- if empty .Values.livenessProbe }}
-            httpGet:
-              path: /
-              port: {{ .Values.defaultService.port }}
-            {{- else }}
             {{- toYaml .Vaules.livenessProbe | nindent 12 }}
-            {{- end }}
           readinessProbe:
-            {{- if empty .Values.readinessProbe }}
-            httpGet:
-              path: /
-              port: {{ .Values.defaultService.port }}
-            {{- else }}
             {{- toYaml .Vaules.readinessProbe | nindent 12 }}
-            {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

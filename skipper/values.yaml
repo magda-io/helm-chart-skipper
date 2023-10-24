@@ -73,8 +73,14 @@ defaultService:
 
 additionalServices: []
 
-livenessProbe: {}
-readinessProbe: {}
+livenessProbe:
+  httpGet:
+    path: /__status/live
+    port: 9090
+readinessProbe: 
+  httpGet:
+    path: /__status/ready
+    port: 9090
 
 config: |
   # skipper config file
@@ -82,6 +88,17 @@ config: |
   access-log: "/dev/stdout"
   application-log: "/dev/stdout"
 
+probeRoutes: |
+  // routes used to setup k8s probes
+  probe_liveness_up: 
+    Method("GET") && Path("/__status/live") -> inlineContent("OK") -> <shunt>;
+  probe_liveness_down: 
+    Method("GET") && Path("/__status/live") && Shutdown() -> status(503) -> inlineContent("shutdown") -> <shunt>;
+  probe_readiness_up: 
+    Method("GET") && Path("/__status/ready") -> inlineContent("OK") -> <shunt>;
+  probe_readiness_down: 
+    Method("GET") && Path("/__status/ready") && Shutdown() -> status(503) -> inlineContent("shutdown") -> <shunt>;
+
 routes: |
-  # setup 
-  * -> "https://www.example.org"
+  // everything else 404
+  defaultRoute: * -> <shunt>;
