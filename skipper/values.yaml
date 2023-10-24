@@ -80,8 +80,9 @@ readinessProbe:
     path: /__status/ready
     port: 9090
 
-config: |
-  # skipper config file
+# -- skipper config file
+# see https://opensource.zalando.com/skipper/tutorials/basics/#yaml-configuration
+config:
   address: ":9090"
   access-log: "/dev/stdout"
   application-log: "/dev/stdout"

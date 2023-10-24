@@ -46,6 +46,10 @@ spec:
           volumeMounts:
           - name: mainConfig
             mountPath: /etc/skipper-config
+          {{- if empty (get (.Values.config | default dict) "routes-urls") }}
+          - name: routes
+            mountPath: /etc/skipper-routes
+          {{- end }}
           ports:
           - name: service-port
             containerPort: 9090
@@ -72,3 +76,8 @@ spec:
         - name: mainConfig
           configMap:
             name: {{ include "skipper.fullname" }}-config
+        {{- if empty (get (.Values.config | default dict) "routes-urls") }}
+        - name: routes
+          configMap:
+            name: {{ include "skipper.fullname" }}-routes
+        {{- end }}

@@ -1,0 +1,19 @@
+{{- if empty (get (.Values.config | default dict) "routes-urls") }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "skipper.fullname" }}-routes
+  labels:
+    {{- include "skipper.labels" . | nindent 4 }}
+data:
+  routes.eskip: |
+    {{- if .Values.probeRoutes }}
+    {{- .Values.probeRoutes | nindent 4 }}
+    {{- end }}
+    {{- if .Values.routes }}
+    {{- .Values.routes | nindent 4 }}
+    {{- end }}
+    {{- if and (empty .Values.routes) (empty .Values.probeRoutes) }}
+    defaultRoute: * -> <shunt>;
+    {{- end }}
+{{- end }}

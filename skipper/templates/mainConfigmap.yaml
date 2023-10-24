@@ -5,4 +5,5 @@ metadata:
   labels:
     {{- include "skipper.labels" . | nindent 4 }}
 data:
-  config.yaml: {{ .Values.config | toYaml | indent 2 | trim }}
+  config.yaml: |
+    {{- .Values.config | default dict | toYaml | nindent 4 }}
