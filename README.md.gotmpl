@@ -6,25 +6,32 @@
 
 {{ template "chart.description" . }}
 
-Requires MAGDA version v2.0.0 or above.
-
-### How to Use
+### Example Usage
 
 1. Add the skipper as a [Helm Chart Dependency](https://helm.sh/docs/helm/helm_dependency/)
 ```yaml
-- name: magda-skipper
+- name: skipper
   alias: my-service-proxy
   version: "1.0.0" # or put the latest version number here
   repository: "oci://ghcr.io/magda-io/charts"
 ```
 
-> Please note: `alias` field is optional. Its purpose is to give the helm chart an alias name (rather than the default `magda-skipper`) so it's possible to use `magda-skipper` plugins multiple times in your deployment.
+> Please note: `alias` field is optional. Its purpose is to give the helm chart an alias name (rather than the default `skipper`) so it's possible to use `skipper` chart multiple times in your deployment.
 
 
 2. Config the proxy via "values" file
 ```yaml
 my-service-proxy:
-
+  service:
+    # set the service name. This DNS name would be avialble within cluster
+    # by default, it would be release name + - + alias name
+    name: service-access-name
+  routes: |
+    myRoutes: 
+      * -> setRequestHeader("my header", "xxxxxx") 
+        -> setPath("/v1${request.path}")
+        -> preserveHost("false")
+        -> "https://xxxxx.xxxx.com";
 ```
 
 {{ template "chart.maintainersSection" . }}
