@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "skipper.fullname" }}-routes
+  name: {{ include "skipper.fullname" . }}-routes
   labels:
     {{- include "skipper.labels" . | nindent 4 }}
 data:

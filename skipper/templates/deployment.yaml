@@ -13,10 +13,10 @@ spec:
       {{- include "skipper.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
       annotations:
         checksum/routes: {{ (printf "%s\n%s" (.Values.routes | default "") (.Values.probeRoutes | default "")) | sha256sum }}
-        checksum/config: {{ .Values.config | default "" | sha256sum }}
+        checksum/config: {{ .Values.config | default dict | toJson | sha256sum }}
+      {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
@@ -33,7 +33,7 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: "{{ .Values.image.repository }}:v{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           args:
           - "skipper"
@@ -44,7 +44,7 @@ spec:
           - "/etc/skipper-routes/routes.eskip"
           {{- end }}
           volumeMounts:
-          - name: mainConfig
+          - name: main-config
             mountPath: /etc/skipper-config
           {{- if empty (get (.Values.config | default dict) "routes-urls") }}
           - name: routes
@@ -55,9 +55,9 @@ spec:
             containerPort: 9090
             protocol: TCP
           livenessProbe:
-            {{- toYaml .Vaules.livenessProbe | nindent 12 }}
+            {{- toYaml .Values.livenessProbe | nindent 12 }}
           readinessProbe:
-            {{- toYaml .Vaules.readinessProbe | nindent 12 }}
+            {{- toYaml .Values.readinessProbe | nindent 12 }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
@@ -73,11 +73,11 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       volumes:
-        - name: mainConfig
+        - name: main-config
           configMap:
-            name: {{ include "skipper.fullname" }}-config
+            name: {{ include "skipper.fullname" . }}-config
         {{- if empty (get (.Values.config | default dict) "routes-urls") }}
         - name: routes
           configMap:
-            name: {{ include "skipper.fullname" }}-routes
+            name: {{ include "skipper.fullname" . }}-routes
         {{- end }}
