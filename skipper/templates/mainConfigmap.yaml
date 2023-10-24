@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "skipper.fullname" }}-config
+  labels:
+    {{- include "skipper.labels" . | nindent 4 }}
+data:
+  config.yaml: {{ .Values.config | toYaml | indent 2 | trim }}

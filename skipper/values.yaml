@@ -71,8 +71,6 @@ service:
     port: 80
     targetPort: 9090
 
-additionalServices: []
-
 livenessProbe:
   httpGet:
     path: /__status/live
