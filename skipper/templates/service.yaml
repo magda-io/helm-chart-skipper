@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.service.name | default  (include "skipper.fullname" .) }}
+  labels:
+    {{- include "skipper.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type | default "ClusterIP" }}
+  {{- required ".Values.service.ports is required" .Values.service.ports}}
+  ports:
+    {{- range $i, $p := .Values.service.ports }}
+    - name: {{ required (printf ".Values.service.ports[%d].name" $i) $p.name | quote }}
+      port: {{ required (printf ".Values.service.ports[%d].port" $i) $p.port }}
+      {{- if $p.targetPort }}
+      targetPort: {{ $p.targetPort }}
+      {{- end }}
+      {{- if $p.protocol }}
+      protocol: {{ $p.protocol }}
+      {{- end }}
+    {{- end }}
+  selector:
+    {{- include "skipper.selectorLabels" . | nindent 4 }}

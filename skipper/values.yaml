@@ -61,14 +61,14 @@ tolerations: []
 
 affinity: {}
 
-defaultService:
-  # -- default, the default service name would be release name + '-' chart name (or chart alias name)
-  # this field allow you to overide the default service name
+service:
+  # -- default, the service name would be release name + '-' chart name (or chart alias name)
+  # this field allow you to override the default service name
   name: ""
   type: ClusterIP
   ports:
   - name: http
-    port: 9090
+    port: 80
     targetPort: 9090
 
 additionalServices: []
