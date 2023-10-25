@@ -36,7 +36,6 @@ jobs:
             echo "Failed to run helm-docs!";
             exit 1;
           fi;
-          cd deploy
           code=0
           git ls-files -m | grep -i readme.md || code=$?;
           if [ "$code" == "0" ]; then

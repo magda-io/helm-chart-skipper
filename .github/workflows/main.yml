@@ -7,7 +7,7 @@ env:
 
 jobs:
   build-test-docker:
-    name: Build, Test & Push to Docker
+    name: Lint & Test Helm Chart
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -33,7 +33,6 @@ jobs:
             echo "Failed to run helm-docs!";
             exit 1;
           fi;
-          cd deploy
           code=0
           git ls-files -m | grep -i readme.md || code=$?;
           if [ "$code" == "0" ]; then
