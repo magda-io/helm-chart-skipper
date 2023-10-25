@@ -1,0 +1,10 @@
+service:
+  # set the service name. This DNS name would be available within cluster
+  # by default, it would be release name + - + alias name
+  name: service-access-name
+routes: |
+  myRoutes:
+    * -> setRequestHeader("my header", "xxxxxx")
+      -> setPath("/v1${request.path}")
+      -> preserveHost("false")
+      -> "https://xxxxx.xxxx.com";

@@ -1,0 +1,6 @@
+dependencies:
+- name: magda-common
+  repository: oci://ghcr.io/magda-io/charts
+  version: 2.3.1
+digest: sha256:54bc18d92604b0c5c3774b89d432c0e701b64eb1f1e07dd2b95ff41c79f06360
+generated: "2023-10-25T11:07:02.570879+11:00"
